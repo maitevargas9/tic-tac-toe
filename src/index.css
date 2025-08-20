@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -100,7 +100,7 @@ button:focus-visible {
   border-radius: 4px;
 }
 
-#gameBoard {
+#game-board {
   display: grid;
   grid-template-columns: repeat(3, 100px);
   grid-template-rows: repeat(3, 100px);
@@ -110,11 +110,11 @@ button:focus-visible {
   list-style: none;
 }
 
-#gameBoard li {
+#game-board li {
   display: flex;
 }
 
-#gameBoard button {
+#game-board button {
   flex: 1;
   font-size: 2rem;
   font-weight: bold;
@@ -124,11 +124,11 @@ button:focus-visible {
   transition: background 0.2s;
 }
 
-#gameBoard button:hover:enabled {
+#game-board button:hover:enabled {
   background: #e2e8f0;
 }
 
-#gameBoard button:disabled {
+#game-board button:disabled {
   cursor: not-allowed;
   color: #666;
 }
