@@ -54,6 +54,52 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+#game-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#players li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f2f2f2;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+}
+
+#players li.active {
+  background: #4f46e5;
+  color: white;
+}
+
+.player {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex: 1;
+}
+
+.player-symbol {
+  font-weight: bold;
+  color: #555;
+}
+
+#players li.active .player-symbol {
+  color: white;
+}
+
+#players input {
+  padding: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 #gameBoard {
   display: grid;
   grid-template-columns: repeat(3, 100px);
