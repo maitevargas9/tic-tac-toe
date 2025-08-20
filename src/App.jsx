@@ -1,15 +1,12 @@
-import Logo from '/Logo.png';
-import './App.css';
+import GameBoard from "./components/GameBoard.jsx";
+import "./App.css";
 
 function App() {
   return (
-    <>
-      <div>
-        <img src={Logo} className="logo" alt="Logo" />
-      </div>
-      <h1>Tic Tac Toe</h1>
-    </>
-  )
+    <main>
+      <GameBoard />
+    </main>
+  );
 }
 
 export default App;

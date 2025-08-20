@@ -54,6 +54,39 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+#gameBoard {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 5px;
+  margin: 1rem auto;
+  padding: 0;
+  list-style: none;
+}
+
+#gameBoard li {
+  display: flex;
+}
+
+#gameBoard button {
+  flex: 1;
+  font-size: 2rem;
+  font-weight: bold;
+  border: 2px solid #333;
+  background: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#gameBoard button:hover:enabled {
+  background: #e2e8f0;
+}
+
+#gameBoard button:disabled {
+  cursor: not-allowed;
+  color: #666;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
