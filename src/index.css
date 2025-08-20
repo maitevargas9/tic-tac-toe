@@ -181,3 +181,20 @@ button:focus-visible {
 #game-over button:hover {
   background: #4338ca;
 }
+
+#log {
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  max-height: 150px;
+  overflow-y: auto;
+  border-top: 1px solid #ddd;
+  padding-top: 0.5rem;
+}
+
+#log li {
+  padding: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #333;
+}

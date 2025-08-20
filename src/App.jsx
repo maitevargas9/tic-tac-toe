@@ -2,6 +2,7 @@ import { useState } from "react";
 import GameBoard from "./components/GameBoard.jsx";
 import GameOver from "./components/GameOver.jsx";
 import Player from "./components/Player.jsx";
+import Log from "./components/Log.jsx";
 import "./App.css";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     O: "Player 2"
   });
   const [editingPlayer, setEditingPlayer] = useState(null);
+  const [turns, setTurns] = useState([]);
 
   const winLines = [
     [0, 1, 2],
@@ -34,6 +36,11 @@ function App() {
     updatedSquares[index] = activePlayer;
     setSquares(updatedSquares);
 
+    setTurns(prev => [
+      { square: index, player: playerNames[activePlayer] },
+      ...prev
+    ]);
+
     for (const [a, b, c] of winLines) {
       if (
         updatedSquares[a] &&
@@ -52,6 +59,7 @@ function App() {
     setSquares(Array(9).fill(null));
     setActivePlayer("X");
     setWinner(null);
+    setTurns([]);
   }
 
   function handleNameChange(symbol, newName) {
@@ -93,6 +101,8 @@ function App() {
             winner={winner ? playerNames[winner] : null}
             onRestart={handleRestart}
           />}
+
+        <Log turns={turns} />
       </div>
     </main>
   );
