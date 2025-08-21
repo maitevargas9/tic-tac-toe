@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import GameBoard from "./components/GameBoard.jsx";
 import GameOver from "./components/GameOver.jsx";
 import Player from "./components/Player.jsx";
 import Log from "./components/Log.jsx";
+import winLines from "./utils/winLines.js";
 import "./App.css";
 
 function App() {
@@ -15,45 +16,64 @@ function App() {
   });
   const [editingPlayer, setEditingPlayer] = useState(null);
   const [turns, setTurns] = useState([]);
+  const [isSinglePlayer, setIsSinglePlayer] = useState(null);
 
-  const winLines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ];
-
-  function handleSelectSquare(index) {
-    if (squares[index] || winner) {
-      return;
-    }
-
-    const updatedSquares = [...squares];
-    updatedSquares[index] = activePlayer;
-    setSquares(updatedSquares);
-
-    setTurns(prev => [
-      { square: index, player: playerNames[activePlayer] },
-      ...prev
-    ]);
-
+  const checkWinner = useCallback(board => {
     for (const [a, b, c] of winLines) {
-      if (
-        updatedSquares[a] &&
-        updatedSquares[a] === updatedSquares[b] &&
-        updatedSquares[a] === updatedSquares[c]
-      ) {
-        setWinner(updatedSquares[a]);
-        return;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return board[a];
       }
     }
+    return null;
+  }, []);
 
-    setActivePlayer(prev => (prev === "X" ? "O" : "X"));
-  }
+  const handleSelectSquare = useCallback(
+    index => {
+      if (squares[index] || winner) {
+        return;
+      }
+
+      const updatedSquares = [...squares];
+      updatedSquares[index] = activePlayer;
+      setSquares(updatedSquares);
+
+      setTurns(prev => [
+        { square: index, player: playerNames[activePlayer] },
+        ...prev
+      ]);
+
+      const winCheck = checkWinner(updatedSquares);
+      if (winCheck) {
+        setWinner(winCheck);
+        return;
+      }
+
+      if (updatedSquares.every(Boolean)) {
+        return;
+      }
+
+      setActivePlayer(prev => (prev === "X" ? "O" : "X"));
+    },
+    [squares, activePlayer, winner, playerNames, checkWinner]
+  );
+
+  useEffect(
+    () => {
+      if (isSinglePlayer && activePlayer === "O" && !winner) {
+        const freeSquares = squares
+          .map((val, i) => (val === null ? i : null))
+          .filter(v => v !== null);
+
+        if (freeSquares.length > 0) {
+          const randomIndex =
+            freeSquares[Math.floor(Math.random() * freeSquares.length)];
+          const timer = setTimeout(() => handleSelectSquare(randomIndex), 500);
+          return () => clearTimeout(timer);
+        }
+      }
+    },
+    [activePlayer, isSinglePlayer, squares, winner, handleSelectSquare]
+  );
 
   function handleRestart() {
     setSquares(Array(9).fill(null));
@@ -71,6 +91,30 @@ function App() {
   }
 
   const isDraw = !winner && squares.every(Boolean);
+
+  if (isSinglePlayer === null) {
+    return (
+      <main style={{ textAlign: "center", marginTop: "3rem" }}>
+        <h2>Select game mode</h2>
+        <button
+          onClick={() => {
+            setIsSinglePlayer(true);
+            setPlayerNames({ X: "Player 1", O: "Computer" });
+          }}
+        >
+          1 Player
+        </button>
+        <button
+          onClick={() => {
+            setIsSinglePlayer(false);
+            setPlayerNames({ X: "Player 1", O: "Player 2" });
+          }}
+        >
+          2 Player
+        </button>
+      </main>
+    );
+  }
 
   return (
     <main>
@@ -96,11 +140,14 @@ function App() {
 
         <GameBoard squares={squares} onSelectSquare={handleSelectSquare} />
 
-        {(winner || isDraw) &&
-          <GameOver
-            winner={winner ? playerNames[winner] : null}
-            onRestart={handleRestart}
-          />}
+        <GameOver
+          winner={winner ? playerNames[winner] : isDraw ? "Draw" : null}
+          onRestart={handleRestart}
+          onGoHome={() => {
+            handleRestart();
+            setIsSinglePlayer(null);
+          }}
+        />
 
         <Log turns={turns} />
       </div>
