@@ -141,7 +141,8 @@ function App() {
         <GameBoard squares={squares} onSelectSquare={handleSelectSquare} />
 
         <GameOver
-          winner={winner ? playerNames[winner] : isDraw ? "Draw" : null}
+          winner={winner ? playerNames[winner] : null}
+          isDraw={isDraw}
           onRestart={handleRestart}
           onGoHome={() => {
             handleRestart();

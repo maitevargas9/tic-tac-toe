@@ -2,7 +2,7 @@ export default function GameOver({ winner, isDraw, onRestart, onGoHome }) {
   return (
     <div id="game-over">
       <h2>
-        {winner ? `${winner} wins!` : isDraw ? "Draw!" : ""}
+        {isDraw ? "Draw!" : winner ? `${winner} wins!` : ""}
       </h2>
       <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
         <button onClick={onRestart}>Start new game</button>
