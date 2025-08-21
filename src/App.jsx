@@ -18,6 +18,18 @@ function App() {
   const [turns, setTurns] = useState([]);
   const [isSinglePlayer, setIsSinglePlayer] = useState(null);
 
+  const [stats, setStats] = useState(() => {
+    const saved = localStorage.getItem("ticTacToeStats");
+    return saved ? JSON.parse(saved) : { X: 0, O: 0, draw: 0 };
+  });
+
+  useEffect(
+    () => {
+      localStorage.setItem("ticTacToeStats", JSON.stringify(stats));
+    },
+    [stats]
+  );
+
   const checkWinner = useCallback(board => {
     for (const [a, b, c] of winLines) {
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
@@ -45,10 +57,18 @@ function App() {
       const winCheck = checkWinner(updatedSquares);
       if (winCheck) {
         setWinner(winCheck);
+        setStats(prev => ({
+          ...prev,
+          [winCheck]: prev[winCheck] + 1
+        }));
         return;
       }
 
       if (updatedSquares.every(Boolean)) {
+        setStats(prev => ({
+          ...prev,
+          draw: prev.draw + 1
+        }));
         return;
       }
 
@@ -151,6 +171,19 @@ function App() {
         />
 
         <Log turns={turns} />
+
+        <div id="stats" style={{ marginTop: "2rem", textAlign: "center" }}>
+          <h3>Statistics</h3>
+          <p>
+            {playerNames.X} Victories: {stats.X}
+          </p>
+          <p>
+            {playerNames.O} Victories: {stats.O}
+          </p>
+          <p>
+            Draw: {stats.draw}
+          </p>
+        </div>
       </div>
     </main>
   );
