@@ -167,6 +167,8 @@ function App() {
           onGoHome={() => {
             handleRestart();
             setIsSinglePlayer(null);
+            setStats({ X: 0, O: 0, draw: 0 });
+            localStorage.removeItem("ticTacToeStats");
           }}
         />
 
